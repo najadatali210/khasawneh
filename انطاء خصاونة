@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>يوم انطاء خصاونة العالمي</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: "Tajawal", sans-serif;
+    }
+
+    body {
+      background-image: url('خصاونة.jpg'); /* الصورة */
+      background-size: contain;       /* تظهر كاملة */
+      background-position: center;   /* في الوسط */
+      background-repeat: no-repeat;  /* بدون تكرار */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;       /* لمحاذاة عموديًا */
+      align-items: center;           /* لمحاذاة أفقيًا */
+      text-align: center;
+      color: #f0f0f0;
+      overflow: hidden;
+      position: relative;
+      padding: 20px;
+    }
+
+    /* غلاف داكن لسهولة قراءة النص */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
+      z-index: -1;
+    }
+
+    h1 {
+      color: #ffd700;
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    .counter-title {
+      color: #ccc;
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+
+    .counter-subtitle {
+      color: #fff;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .counter {
+      font-size: 48px;
+      margin: 10px 0;
+      color: #00ff99;
+      transition: transform 0.2s ease;
+    }
+
+    .counter.flash {
+      transform: scale(1.5);
+      color: #ff0;
+    }
+
+    .donor {
+      font-size: 24px;
+      color: #fff;
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>يوم انطاء خصاونة العالمي</h1>
+  <div class="counter-title">عدد المنطين</div>
+  <div class="counter-subtitle">عدد المتبرعين:</div>
+  <div class="counter" id="total">0</div>
+  <div class="donor" id="donorName">--</div>
+
+  <script>
+    let total = parseInt(localStorage.getItem('total') || '0', 10);
+    const display = document.getElementById('total');
+    const donorDisplay = document.getElementById('donorName');
+    display.textContent = total;
+
+    const maleNames = ['أحمد', 'خالد', 'محمد', 'عبدالله', 'يوسف', 'مروان', 'مالك']; 
+    const femaleNames = ['سارة', 'ليلى', 'نور', 'فاطمة', 'جميلة', 'حنان', 'رنا', 'تغريد'];
+
+    function getRandomName() {
+      let arabic, suffix;
+      if (Math.random() < 0.5) {
+        arabic = maleNames[Math.floor(Math.random() * maleNames.length)];
+        suffix = 'انطا خصاونة';
+      } else {
+        arabic = femaleNames[Math.floor(Math.random() * femaleNames.length)];
+        suffix = 'انطت خصاونة';
+      }
+      return `${arabic} ${suffix}`;
+    }
+
+    function showDonor() {
+      donorDisplay.style.animation = 'none';
+      void donorDisplay.offsetWidth;
+      donorDisplay.textContent = getRandomName();
+      donorDisplay.style.animation = 'fadeInUp 1s ease forwards';
+    }
+
+    function flashCounter() {
+      display.classList.add('flash');
+      setTimeout(() => display.classList.remove('flash'), 300);
+    }
+
+    function updateCounter() {
+      total += 1;
+      display.textContent = total;
+      localStorage.setItem('total', total);
+      showDonor();
+      flashCounter();
+    }
+
+    setInterval(updateCounter, 3000);
+    showDonor();
+  </script>
+</body>
+</html>
